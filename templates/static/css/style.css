@@ -1,0 +1,84 @@
+.green {
+    background-color: #009900;
+}
+
+.red {
+    background-color: #FF0000;
+}
+
+.blue {
+    background-color: #66CCFF;
+}
+
+.yellow {
+    background-color: #FFCC00;
+}
+
+.row {
+    display: flex;
+}
+
+.board {
+    width: fit-content;
+    border: 10px solid #11262e;
+    border-radius: 5px;
+    margin: 10px auto;
+}
+
+.home-box {
+    width: 250px;
+    height: 250px;
+    border: 1px solid black;
+}
+
+.white-box {
+    background-color: white;
+    width: 150px;
+    height: 150px;
+    margin: 20% auto;
+    border: 1px solid black;
+}
+
+.white-box .circle {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    margin: 16px;
+    border: 1px solid black;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+}
+
+.destination {
+    border-top: 63px solid #009900;
+    border-left: 63px solid #FF0000;
+    border-right: 63px solid #FFCC00;
+    border-bottom: 63px solid #66CCFF;
+}
+
+/* CSS for Player pointer */
+.player-pointer {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #fff;
+    position: absolute;
+    transition: all 0.2s ease-out;
+}
+
+.player-pointer .ppwhite {
+    width: 10px;
+    height: 10px;
+    margin: 5px auto;
+    background-color: #fff;
+    border-radius: 50%;
+}

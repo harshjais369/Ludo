@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  <link rel="stylesheet" type="text/css" href="static/css/popup.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+
+<body>
+  <div class="modal-container" id="modalContainer">
+    <div class="modal-content">
+      <h2 class="modal-title">Choose your colour</h2>
+      <select id="colorSelect">
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="blue">Blue</option>
+      </select>
+      <button id="joinGame">Join</button>
+      <button id="startGame">Start Game</button>
+      <br>
+      <hr>
+      <h2>Players:</h2>
+      <div id="playersList"></div>
+    </div>
+  </div>
+
+  <div class="board">
+    <div class="row">
+      <div class="home-box red">
+        <div class="white-box">
+          <div class="red circle" id="rhome2">
+            <div class="player-pointer red" id="rpt2">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="red circle" id="rhome4">
+            <div class="player-pointer red" id="rpt4">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="red circle" id="rhome1">
+            <div class="player-pointer red" id="rpt1">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="red circle" id="rhome3">
+            <div class="player-pointer red" id="rpt3">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cell-container">
+        <div class="row">
+          <div class="cell" id="c11"></div>
+          <div class="cell" id="c12"></div>
+          <div class="cell" id="c13"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c10"></div>
+          <div class="cell green" id="cg1"></div>
+          <div class="cell green" id="c14"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c9"></div>
+          <div class="cell green" id="cg2"></div>
+          <div class="cell" id="c15"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c8"></div>
+          <div class="cell green" id="cg3"></div>
+          <div class="cell" id="c16"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c7"></div>
+          <div class="cell green" id="cg4"></div>
+          <div class="cell" id="c17"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c6"></div>
+          <div class="cell green" id="cg5"></div>
+          <div class="cell" id="c18"></div>
+        </div>
+      </div>
+      <div class="home-box green">
+        <div class="white-box">
+          <div class="green circle" id="ghome1">
+            <div class="player-pointer green" id="gpt1">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="green circle" id="ghome2">
+            <div class="player-pointer green" id="gpt2">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="green circle" id="ghome3">
+            <div class="player-pointer green" id="gpt3">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="green circle" id="ghome4">
+            <div class="player-pointer green" id="gpt4">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell-container">
+        <div class="row">
+          <div class="cell" id="c52"></div>
+          <div class="cell red" id="c1"></div>
+          <div class="cell" id="c2"></div>
+          <div class="cell" id="c3"></div>
+          <div class="cell" id="c4"></div>
+          <div class="cell" id="c5"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c51"></div>
+          <div class="cell red" id="cr1"></div>
+          <div class="cell red" id="cr2"></div>
+          <div class="cell red" id="cr3"></div>
+          <div class="cell red" id="cr4"></div>
+          <div class="cell red" id="cr5"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c50"></div>
+          <div class="cell" id="c49"></div>
+          <div class="cell" id="c48"></div>
+          <div class="cell" id="c47"></div>
+          <div class="cell" id="c46"></div>
+          <div class="cell" id="c45"></div>
+        </div>
+      </div>
+      <div class="destination"></div>
+      <div class="cell-container">
+        <div class="row">
+          <div class="cell" id="c19"></div>
+          <div class="cell" id="c20"></div>
+          <div class="cell" id="c21"></div>
+          <div class="cell" id="c22"></div>
+          <div class="cell" id="c23"></div>
+          <div class="cell" id="c24"></div>
+        </div>
+        <div class="row">
+          <div class="cell yellow" id="cy5"></div>
+          <div class="cell yellow" id="cy4"></div>
+          <div class="cell yellow" id="cy3"></div>
+          <div class="cell yellow" id="cy2"></div>
+          <div class="cell yellow" id="cy1"></div>
+          <div class="cell" id="c25"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c31"></div>
+          <div class="cell" id="c30"></div>
+          <div class="cell" id="c29"></div>
+          <div class="cell" id="c28"></div>
+          <div class="cell yellow" id="c27"></div>
+          <div class="cell" id="c26"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="home-box blue">
+        <div class="white-box">
+          <div class="blue circle" id="bhome4">
+            <div class="player-pointer blue" id="bpt4">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="blue circle" id="bhome3">
+            <div class="player-pointer blue" id="bpt3">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="blue circle" id="bhome2">
+            <div class="player-pointer blue" id="bpt2">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="blue circle" id="bhome1">
+            <div class="player-pointer blue" id="bpt1">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cell-container">
+        <div class="row">
+          <div class="cell" id="c44"></div>
+          <div class="cell blue" id="cb5"></div>
+          <div class="cell" id="c32"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c43"></div>
+          <div class="cell blue" id="cb4"></div>
+          <div class="cell" id="c33"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c42"></div>
+          <div class="cell blue" id="cb3"></div>
+          <div class="cell" id="c34"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c41"></div>
+          <div class="cell blue" id="cb2"></div>
+          <div class="cell" id="c35"></div>
+        </div>
+        <div class="row">
+          <div class="cell blue" id="c40"></div>
+          <div class="cell blue" id="cb1"></div>
+          <div class="cell" id="c36"></div>
+        </div>
+        <div class="row">
+          <div class="cell" id="c39"></div>
+          <div class="cell" id="c38"></div>
+          <div class="cell" id="c37"></div>
+        </div>
+      </div>
+      <div class="home-box yellow">
+        <div class="white-box">
+          <div class="yellow circle" id="yhome3">
+            <div class="player-pointer yellow" id="ypt3">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="yellow circle" id="yhome1">
+            <div class="player-pointer yellow" id="ypt1">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="yellow circle" id="yhome4">
+            <div class="player-pointer yellow" id="ypt4">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+          <div class="yellow circle" id="yhome2">
+            <div class="player-pointer yellow" id="ypt2">
+              <div class="ppwhite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="static/js/socket.js"></script>
+  <script src="static/js/script.js"></script>
+</body>
+
+</html>
