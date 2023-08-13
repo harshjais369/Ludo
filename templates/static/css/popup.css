@@ -22,6 +22,14 @@
     width: 90%;
 }
 
+#loader {
+    /* background-image: url('templates\static\res\right_loader.gif'); */
+}
+
+#waitingPanel {
+    display: none;
+}
+
 /* Modal Title */
 .modal-title {
     font-size: 24px;

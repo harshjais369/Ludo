@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const playerRect = player.getBoundingClientRect();
     const deltaX = cellRect.left - playerRect.left;
     const deltaY = cellRect.top - playerRect.top;
-
+    // deltaX/Y + {num} ; num = pointer display offset
     currPosX += (deltaX + 10);
     currPosY += (deltaY + 10);
     player.style.transform = `translate(${currPosX}px, ${currPosY}px)`;
@@ -57,7 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function loadGame(diceNumber, turn);
+  function loadGame(diceNumber, turn) {
+    pass;
+  }
 
   // Should be called after auth
   function authCurrPlayer() {
@@ -65,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // If url registered, it'd send "game state" & "current player's info" with "page url" as id to current player
     // else game spectator
     // Anyone with "this" page url, will be considered "this" player
+    sessionUrl = window.location.search;
+    sendAuthRequest_socket(sessionUrl);
   }
 
   // Add click event listeners to each cell
@@ -82,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   
-
+  authCurrPlayer();
 
 });
 
