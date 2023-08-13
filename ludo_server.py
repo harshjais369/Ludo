@@ -1,11 +1,11 @@
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit, request, join_room
+from flask import Flask, request, render_template
+from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 import funcs
 
 app = Flask(__name__, template_folder='templates', static_folder='templates/static')
 socketio = SocketIO(app, async_mode='threading', transport='websocket')
-CORS(app, origins=['http://localhost:5000'])
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # Game state for all rooms
 STATE = {}
@@ -34,14 +34,14 @@ def on_connect():
 def on_disconnect():
     print('A user disconnected!')
 
-@socketio.on('auth_user')
+@socketio.on('authRequest')
 def on_auth_user(data):
     session_url = data['session_url']
     if session_url in SESSION_URLS:
         # The player has joined a room before (player mode)
         room_id, colour = SESSION_URLS[session_url]
-        emit('auth_result', {'status': 'passed', 'session_url': session_url, 'room_id': room_id, 'colour': colour}, to=request.sid)
-        emit('update_game_state', {'game_state': STATE[room_id]}, to=room_id)
+        emit('authResult', {'status': 'passed', 'session_url': session_url, 'room_id': room_id, 'colour': colour}, to=request.sid)
+        emit('updateGameState', {'game_state': STATE[room_id]}, to=room_id)
     elif funcs.getSessionData(session_url) is not None:
         room_id = funcs.getSessionData(session_url)['room_id']
         # The session URL is valid but the player has not joined any room (spectator mode)
@@ -52,18 +52,18 @@ def on_auth_user(data):
                 "turn": None,
                 "players": []
             }
-        emit('auth_result', {'status': 'passed', 'session_url': session_url, 'room_id': room_id, colour: None}, to=request.sid)
-        emit('update_game_state', {'game_state': STATE[room_id]}, to=request.sid)
+        emit('authResult', {'status': 'passed', 'session_url': session_url, 'room_id': room_id, colour: None}, to=request.sid)
+        emit('updateGameState', {'game_state': STATE[room_id]}, to=request.sid)
     else:
         # The session URL is abused (e.g. modified by the user)
-        emit('auth_result', {'status': 'failed', 'session_url': session_url, 'room_id': None}, to=request.sid)
+        emit('authResult', {'status': 'failed', 'session_url': session_url, 'room_id': None}, to=request.sid)
 
 @socketio.on('join')
 def on_join(data):
     session_url = data['session_url']
     data = funcs.getSessionData(session_url)
     if data is None:
-        emit('auth_result', {'status': 'failed', 'session_url': session_url, 'room_id': None}, to=request.sid)
+        emit('authResult', {'status': 'failed', 'session_url': session_url, 'room_id': None}, to=request.sid)
         return
     room_id = data['room_id']
     username = data['username']
@@ -84,20 +84,20 @@ def on_join(data):
         return
     # Register the player's session URL
     SESSION_URLS[session_url] = (room_id, colour)
-    emit('join_result', {'status': 'passed', 'session_url': session_url, 'room_id': room_id, 'colour': colour}, to=request.sid)
-    emit('update_game_state', {'game_state': STATE[room_id]}, room_id=room_id)
+    emit('joinResult', {'status': 'passed', 'session_url': session_url, 'room_id': room_id, 'colour': colour}, to=request.sid)
+    emit('updateGameState', {'game_state': STATE[room_id]}, room_id=room_id)
     if (len(STATE[room_id]['players'] >= 4)):
         # Room is full, start the game
         pass
 
-@socketio.on('take_turn')
+@socketio.on('takeTurn')
 def on_take_turn(data):
     room_id = data['room_id']
     # Implement your game logic to process the player's action
     # Update the game state accordingly
     # For example, you can update the position of the token, etc.
     # Then emit the updated game state to all players in the room
-    emit('update_game_state', {'game_state': STATE[room_id]}, room_id=room_id)
+    emit('updateGameState', {'game_state': STATE[room_id]}, room_id=room_id)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
