@@ -5,7 +5,7 @@ import funcs
 
 app = Flask(__name__, template_folder='templates', static_folder='templates/static')
 socketio = SocketIO(app, async_mode='threading', transport='websocket')
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app)
 
 # Game state for all rooms
 STATE = {}
